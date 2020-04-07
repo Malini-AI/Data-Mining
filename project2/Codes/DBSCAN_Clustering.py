@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[168]:
-
-
 import pandas as pd
 import itertools
 from sklearn.decomposition import PCA
@@ -11,63 +8,31 @@ import matplotlib.pyplot as pl
 import numpy as np
 from random import randint
 
-
-# In[169]:
-
-
 file_name = input("Enter file name: ")
 eps = float(input("Enter E-Neighborhood distance:"))
 minpoints= int(input("Enter Number of MinPoints:"))
 
 
-# In[170]:
-
-
 # Reading file into Dataframe
 Data = pd.read_csv(file_name, sep='\t', lineterminator='\n', header=None)
-#Data
-
-
-# In[171]:
 
 
 #Extracting attributes and storing it
 points = Data.iloc[:,2:]
-#points
-
-
-# In[172]:
 
 
 #Creating array for all attributes 
 points_arr=points.iloc[:,:].values
-#points_arr
-
-
-# In[173]:
-
 
 size = len(points.index)
-#print(size)
-
-
-# In[174]:
 
 
 cols = len(points_arr[0])
-#print(cols)
-
-
-# In[175]:
 
 
 #Function to calculate Euclidian Distance between 2 Points
 def eucl_dist(p1, p2):
     return np.linalg.norm(p1-p2)
-
-
-# In[176]:
-
 
 def distance_matrix(arr):
     #Initializing Distance Matrix to store Euclidian Distance for each individual point
@@ -78,10 +43,6 @@ def distance_matrix(arr):
             dist_matrix[i][j]=eucl_dist(arr[i],arr[j])
     return dist_matrix
 
-
-# In[177]:
-
-
 def regionquery(eps, dis):
     np = []
     np_index = []
@@ -91,15 +52,7 @@ def regionquery(eps, dis):
             np_index.append(i)
     return np, np_index
 
-
-# In[178]:
-
-
 clus = {}
-
-
-# In[179]:
-
 
 def DBSCAN(points_arr, eps, MinPts):
     count=1
@@ -130,14 +83,7 @@ def DBSCAN(points_arr, eps, MinPts):
                 count= count + 1
                 #print("CLUSTER---",clus)
     return cluster_no
-        
-    
-    
-
-
-# In[180]:
-
-
+  
 def expandcluster(eps, MinPts, neighborpts, neighpts_index, count,dist_matrix,visited,cluster_no,clus):
     neighbors = []
     neighbors_in = []
@@ -158,21 +104,9 @@ def expandcluster(eps, MinPts, neighborpts, neighpts_index, count,dist_matrix,vi
                 clus[count] = str(clus[count])+","+str(i)
     return
 
-
-# In[181]:
-
-
 result =DBSCAN(points_arr,eps,minpoints)
 
-
-# In[182]:
-
-
 print(result)
-
-
-# In[192]:
-
 
 #Assigning Cluster IDs to individual points(386)
 list_set = set(result)
@@ -191,19 +125,11 @@ for i in range(0,len(result)):
 print(clust_dict)
 print(clusters)
 
-
-# In[184]:
-
-
 #Extracting ground truth from the data set and storing it in an array
 ground_set = Data.iloc[:,1:2]
 #print(type(ground_set))
 ground_set = ground_set.to_numpy()
 #print(type(ground_set))
-
-
-# In[185]:
-
 
 # Creating Array of Ground Truth Clusters
 P = np.zeros([size,size], dtype=int)
@@ -215,9 +141,6 @@ for i in range(0,size):
             P[i][j]=0
 
 
-# In[186]:
-
-
 # Creating Array of Clusters reported by Clustering Algorithm (Heirarchical)
 C = np.zeros([size,size], dtype=int)
 for i in range(0,size):
@@ -226,10 +149,6 @@ for i in range(0,size):
             C[i][j]=1
         else:
             C[i][j]=0
-
-
-# In[187]:
-
 
 #Calculating  M00,M01,M10 & M11 which will be used in Rand Index and Jaccard Coeeficient Calculations
 M00=0
@@ -248,24 +167,14 @@ for i in range(0,size):
             M11+=1
 
 
-# In[188]:
-
-
 #Rand Index Calculation
 rand = (M11+M00)/(M11+M00+M01+M10)
 print("Rand Index:",rand)
 
 
-# In[189]:
-
-
 #Jaccard Coefficient Calculation
 jaccard_coeff = (M11)/(M11+M01+M10)
 print("Jaccard Coefficient:",jaccard_coeff)
-
-
-# In[190]:
-
 
 #Function to visualize using PCA
 def PCA_Plot(points,cluster_set,heading):
@@ -297,16 +206,6 @@ def PCA_Plot(points,cluster_set,heading):
     pl.show()
 
 
-# In[191]:
-
-
 #Plotting Plots for clusters calcualted using HAC Algorithm and Ground Truth Plot
 PCA_Plot(points, result, 'DBSCAN PCA plot')
 PCA_Plot(points, ground_set, 'Ground Truth PCA plot')
-
-
-# In[ ]:
-
-
-
-
