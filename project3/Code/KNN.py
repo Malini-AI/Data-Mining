@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[154]:
-
-
 import pandas as pd
 import numpy as np
 import math
@@ -13,9 +10,6 @@ from statistics import mean
 from random import randrange
 from sklearn import preprocessing
 import itertools
-
-
-# In[173]:
 
 
 # User Input for Dataset, Number of Folds & Number of Neighbors(k)
@@ -29,10 +23,6 @@ else:
 neighbors = int(input("Enter number of Neighbors to consider: "))
 choice2 = int(input("Enter 1 for Normalizing Data or 0 for not Normalizing Data: "))
 
-
-# In[174]:
-
-
 # Reading file into Dataframe
 if choice1==1:
     trainData = pd.read_csv(train_file_name, sep='\t', lineterminator='\n', header=None)
@@ -40,10 +30,6 @@ if choice1==1:
 else:
     Data = pd.read_csv(file_name, sep='\t', lineterminator='\n', header=None)
     Data
-
-
-# In[175]:
-
 
 # Function to check if the dataset has nominal(string) and/or continuous(numerical) and return the columns containing strings
 def check_string(data):
@@ -58,10 +44,6 @@ def check_string(data):
             index.append(i)
     return flag, index      
 
-
-# In[176]:
-
-
 # Funtion to convert string to its equivalent one hot enconding value
 def one_hot_encoding(data):
     le = preprocessing.LabelEncoder()
@@ -72,10 +54,6 @@ def one_hot_encoding(data):
     data = le.transform(data)
     #print(data)
     return data
-
-
-# In[177]:
-
 
 # Check if the dataset has any string values and converting the string values to its one hot encoding values
 if choice1==0:
@@ -106,17 +84,11 @@ else:
     #Data
 
 
-# In[178]:
-
-
 if choice1==0:
     print(Data)
 else:
     print(trainData)
     print(testData)
-
-
-# In[179]:
 
 
 if(choice2==1):
@@ -127,10 +99,6 @@ if(choice2==1):
     Data = pd.concat([normalize,Data.iloc[:,-1]], axis = 1)
     print(Data)
 
-
-# In[180]:
-
-
 #Function to calculate Euclidian Distance between 2 Points
 def eucl_dist(p1, p2):
     d = 0.0
@@ -138,9 +106,6 @@ def eucl_dist(p1, p2):
         d = d + (p1[i] - p2[i])**2
     d = sqrt(d)
     return d
-
-
-# In[181]:
 
 
 #Function to predict the output class of the test data sample
@@ -165,10 +130,6 @@ def predict_class(train, row, neighbors):
     final_class = max(set(output), key=output.count)
     return final_class
 
-
-# In[182]:
-
-
 #Function to execute the KNN algorithm 
 def KNN(train,test,neighbors):
     predictions = []
@@ -176,10 +137,6 @@ def KNN(train,test,neighbors):
         output_class = predict_class(train,row,neighbors)
         predictions.append(output_class)
     return predictions
-
-
-# In[167]:
-
 
 # Function to calculate the performance metrics for the algorithm
 def evaluation(predicted_value, actual_value):
@@ -211,10 +168,6 @@ def evaluation(predicted_value, actual_value):
     else:
         f1=(2*TP)/((2*TP)+FN+FP)
     return accuracy, precision, recall, f1
-
-
-# In[168]:
-
 
 # Function to create K-Folds of the given dataset into test and train datasets
 def create_fold(data,fold):
@@ -253,10 +206,6 @@ def create_fold(data,fold):
             test.append(arr)   
     return test,train
 
-
-# In[169]:
-
-
 # Create folds for the given datasets
 if(choice1==0):
     test_fold,train_fold = create_fold(Data,fold)
@@ -264,23 +213,6 @@ else:
     train_fold = trainData.iloc[:,:].values #indexes rows for training data
     test_fold = testData.iloc[:,:].values
     fold=1
-    #test_fold,train_fold = 
-
-
-# In[170]:
-
-
-#test_fold[0]
-
-
-# In[171]:
-
-
-#len(test_fold)
-
-
-# In[172]:
-
 
 # Loop through all Folds, predict output class by KNN algorithm and calculate performance metrics for each fold
 accuracy=[]
@@ -336,4 +268,3 @@ print("Accuracy: ", mean(accuracy))
 print("Precision: ", mean(precision))
 print("Recall: ", mean(recall))
 print("F1 measure: ", mean(f1))
-
