@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 import pandas as pd
 import itertools
 from sklearn.decomposition import PCA
@@ -12,10 +9,6 @@ import numpy as np
 from random import randint
 import math
 
-
-# In[57]:
-
-
 # User Input for Dataset & Number of Clusters
 file_name = input("Enter file name: ")
 clusters = int(input("Enter Number of Clusters:"))
@@ -23,61 +16,28 @@ iterations= int(input("Enter Number of Iterations"))
 smooth = float(input("Enter Smoothing Value"))
 threshold = float(input("Enter Threshold Value"))
 
-
-# In[58]:
-
-
 choice = int(input("Enter 1 for user input of initialization parameters and 2 for random"))
-
-
-# In[59]:
-
 
 print(smooth)
 
 
-# In[60]:
-
 
 # Reading file into Dataframe
 Data = pd.read_csv(file_name, sep='\t', lineterminator='\n', header=None)
-#Data
-
-
-# In[61]:
-
 
 #Extracting attributes and storing it
 points = Data.iloc[:,2:]
-#points
-
-
-# In[62]:
-
 
 #Creating array for all attributes 
 points_arr=points.iloc[:,:].values
 points_arr
 print(np.shape(points_arr))
 
-
-# In[63]:
-
-
 size = len(points.index)
 print(size)
 
-
-# In[64]:
-
-
 cols = len(points_arr[0])
 print(cols)
-#print(points_arr.shape[0])
-
-
-# In[65]:
-
 
 #Removing Outliers for iyer.txt
 if file_name=="iyer.txt":
@@ -99,9 +59,6 @@ if file_name=="iyer.txt":
     print(size)
     points = Data.iloc[:,2:]
     print(len(points))
-
-
-# In[73]:
 
 
 if choice==1:
@@ -139,24 +96,12 @@ else:
     prob = np.zeros((size,clusters))
     mu = points_arr[np.random.randint(0, size, size=clusters)]
 
-
-# In[74]:
-
-
 print(mu)
 print(cov)
 print(weight_pi)
 #print(weight_pi.dtype)
 
-
-# In[75]:
-
-
 print(np.linalg.det(cov))
-
-
-# In[76]:
-
 
 from scipy.stats import multivariate_normal as mvn
 def Estep():
@@ -171,9 +116,6 @@ def Estep():
     prob /= prob.sum(0)
     #print("Prob:",prob)
     return prob
-
-
-# In[77]:
 
 
 def Mstep(prob):
@@ -201,10 +143,6 @@ def Mstep(prob):
     return mu,cov,weight_pi
       
 
-
-# In[78]:
-
-
 ll_old=0
 for i in range(iterations):
     print("Iterations:", i)
@@ -226,10 +164,6 @@ for i in range(iterations):
         break
     ll_old = ll_new
 
-
-# In[ ]:
-
-
 clust_dict={}
 
 for c in range(1,clusters+1):
@@ -245,9 +179,6 @@ for i in range(size):
         clust_dict[clust] = clust_dict[clust]+","+str(i+1) 
 
 
-# In[ ]:
-
-
 #Function to assign Cluster IDs to individual rows
 def create_label(clust_dict):
     l=1
@@ -261,15 +192,9 @@ def create_label(clust_dict):
     return label
 
 
-# In[ ]:
-
-
 #Creating Cluster IDs for each row
 cluster_set=create_label(clust_dict)
 print(type(cluster_set[0]))
-
-
-# In[ ]:
 
 
 #Extracting ground truth from the data set and storing it in an array
@@ -278,9 +203,6 @@ print(type(ground_set))
 ground_set = ground_set.to_numpy()
 print(type(ground_set))
 print(np.shape(ground_set))
-
-
-# In[ ]:
 
 
 # Creating Array of Ground Truth Clusters
@@ -293,9 +215,6 @@ for i in range(0,size):
             P[i][j]=0
 
 
-# In[ ]:
-
-
 # Creating Array of Clusters reported by Clustering Algorithm (Heirarchical)
 C = np.zeros([size,size], dtype=int)
 for i in range(0,size):
@@ -304,10 +223,6 @@ for i in range(0,size):
             C[i][j]=1
         else:
             C[i][j]=0
-
-
-# In[ ]:
-
 
 #Calculating  M00,M01,M10 & M11 which will be used in Rand Index and Jaccard Coeeficient Calculations
 M00=0
@@ -326,23 +241,14 @@ for i in range(0,size):
             M11+=1
 
 
-# In[ ]:
-
-
 #Rand Index Calculation
 rand = (M11+M00)/(M11+M00+M01+M10)
 print("Rand Index:",rand)
 
 
-# In[ ]:
-
-
 #Jaccard Coefficient Calculation
 jaccard_coeff = (M11)/(M11+M01+M10)
 print("Jaccard Coefficient:",jaccard_coeff)
-
-
-# In[ ]:
 
 
 #Function to visualize using PCA
@@ -375,16 +281,6 @@ def PCA_Plot(points,cluster_set,heading):
     pl.show()
 
 
-# In[ ]:
-
-
 #Plotting Plots for clusters calcualted using HAC Algorithm and Ground Truth Plot
 PCA_Plot(points, cluster_set, 'GMM PCA plot')
 PCA_Plot(points, ground_set, 'Ground Truth PCA plot')
-
-
-# In[ ]:
-
-
-
-
