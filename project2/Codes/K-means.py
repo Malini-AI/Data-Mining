@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[76]:
-
 
 import pandas as pd
 import itertools
@@ -10,10 +8,6 @@ from sklearn.decomposition import PCA
 import matplotlib.pyplot as pl
 import numpy as np
 from random import randint
-
-
-# In[77]:
-
 
 # User Input for Dataset & Number of Clusters
 file_name = input("Enter file name: ")
@@ -26,52 +20,25 @@ if (choice==2):
     if (len(a)!=clusters):
         print("Invalid Input")
 
-
-# In[78]:
-
-
 # Reading file into Dataframe
 Data = pd.read_csv(file_name, sep='\t', lineterminator='\n', header=None)
-
-
-# In[79]:
 
 
 #Extracting attributes and storing it
 points = Data.iloc[:,2:]
 
-
-# In[80]:
-
-
 #Creating array for all attributes 
 points_arr=points.iloc[:,:].values
-
-
-# In[81]:
-
 
 size = len(points.index)
 #print(size)
 
-
-# In[82]:
-
-
 cols = len(points_arr[0])
 #print(cols)
-
-
-# In[83]:
-
 
 #Function to calculate Euclidian Distance between 2 Points
 def eucl_dist(p1, p2):
     return np.linalg.norm(p1-p2)
-
-
-# In[84]:
-
 
 if(choice==1):
     idx = np.random.randint(size, size=clusters)
@@ -79,9 +46,6 @@ if(choice==1):
     print(points_arr[idx,:])
 elif(choice == 2):
     idx=a
-
-
-# In[85]:
 
 
 #Creating Dictionary to store initial clusters ( 386 points assigned to 386 clusters ranging from 1 to 386)
@@ -92,20 +56,12 @@ for i in idx:
     c+=1
 print(clust_dict)
 
-
-# In[86]:
-
-
 centroids = np.zeros([clusters,cols], dtype = float)
 i=0
 for key in clust_dict:
     centroids[i]=points_arr[int(clust_dict[key])-1]
     i+=1
 print(centroids)
-
-
-# In[87]:
-
 
 def distance_matrix(arr,centroids):
     #Initializing Distance Matrix to store Euclidian Distance for each individual point
@@ -115,10 +71,6 @@ def distance_matrix(arr,centroids):
             #print("dist bet:", centroids[j])
             dist_matrix[i][j]=eucl_dist(arr[i],centroids[j])
     return dist_matrix
-
-
-# In[93]:
-
 
 def find_clusters(dist_matrix):
     clust_dict={}
@@ -139,10 +91,6 @@ def find_clusters(dist_matrix):
     print(clust_dict)
     return clust_dict
 
-
-# In[94]:
-
-
 def calculate_centroid(arr,clust_dict):
     centroids = np.zeros([clusters,cols], dtype = float)
     i=0
@@ -157,18 +105,9 @@ def calculate_centroid(arr,clust_dict):
         centroids[i]=np.mean(temp, axis = 0)
         i+=1
     return centroids
-    
-
-
-# In[95]:
-
 
 def check_centroid(arr1,arr2):
     return np.array_equal(arr1,arr2)
-
-
-# In[96]:
-
 
 no_iter=1
 while(no_iter<=iterations):
@@ -186,9 +125,6 @@ while(no_iter<=iterations):
 print(clust_dict)
 
 
-# In[28]:
-
-
 #Function to assign Cluster IDs to individual rows
 def create_label(clust_dict):
     l=1
@@ -201,16 +137,9 @@ def create_label(clust_dict):
         l+=1
     return label
 
-
-# In[29]:
-
-
 #Creating Cluster IDs for each row
 cluster_set=create_label(clust_dict)
 #print(type(cluster_set[0]))
-
-
-# In[30]:
 
 
 #Extracting ground truth from the data set and storing it in an array
@@ -218,9 +147,6 @@ ground_set = Data.iloc[:,1:2]
 #print(type(ground_set))
 ground_set = ground_set.to_numpy()
 #print(type(ground_set))
-
-
-# In[31]:
 
 
 # Creating Array of Ground Truth Clusters
@@ -232,10 +158,6 @@ for i in range(0,size):
         else:
             P[i][j]=0
 
-
-# In[32]:
-
-
 # Creating Array of Clusters reported by Clustering Algorithm (Heirarchical)
 C = np.zeros([size,size], dtype=int)
 for i in range(0,size):
@@ -244,9 +166,6 @@ for i in range(0,size):
             C[i][j]=1
         else:
             C[i][j]=0
-
-
-# In[33]:
 
 
 #Calculating  M00,M01,M10 & M11 which will be used in Rand Index and Jaccard Coeeficient Calculations
@@ -266,24 +185,13 @@ for i in range(0,size):
             M11+=1
 
 
-# In[34]:
-
-
 #Rand Index Calculation
 rand = (M11+M00)/(M11+M00+M01+M10)
 print("Rand Index:",rand)
 
-
-# In[35]:
-
-
 #Jaccard Coefficient Calculation
 jaccard_coeff = (M11)/(M11+M01+M10)
 print("Jaccard Coefficient:",jaccard_coeff)
-
-
-# In[36]:
-
 
 #Function to visualize using PCA
 def PCA_Plot(points,cluster_set,heading):
@@ -315,16 +223,8 @@ def PCA_Plot(points,cluster_set,heading):
     pl.show()
 
 
-# In[37]:
-
-
 #Plotting Plots for clusters calcualted using HAC Algorithm and Ground Truth Plot
 PCA_Plot(points, cluster_set, 'K-means PCA plot')
 PCA_Plot(points, ground_set, 'Ground Truth PCA plot')
-
-
-# In[ ]:
-
-
 
 
