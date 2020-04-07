@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Import Libraries
-
-# In[2]:
-
-
 from csv import reader
 from random import randrange
 from math import sqrt
@@ -17,31 +12,12 @@ import numpy as np
 from sklearn import preprocessing
 from statistics import mean
 
-
-# # Get Input File
-
-# In[3]:
-
-
 # User Input for Dataset & Number of Folds
 file_name = input("Enter file name: ")
 df = pd.read_csv(file_name, delimiter="\t",header=None)
-#df = pd.read_csv('C:/Users/malin/Desktop/project3_dataset4.txt', delimiter="\t",header=None)
-
-
-# # Get K_fold
-
-# In[4]:
-
 
 print("Enter fold = 0 for dataset 4 or demo dataset\n")
 fold = int(input("K_fold: "))
-
-
-# # Get test data
-
-# In[5]:
-
 
 if fold==0:
     t=(input("test data: "))
@@ -50,21 +26,9 @@ if fold==0:
     f.write(t)
     f.close()
 
-
-# # Read the test data
-
-# In[6]:
-
-
 if fold == 0:
     TEST = pd.read_csv('Test.txt', delimiter=",",header=None)
     print(TEST)
-
-
-# # All Functions
-
-# In[13]:
-
 
 # Function to check if the dataset has nominal(string) and/or continuous(numerical) and return the columns containing strings
 def check_string(data):
@@ -241,12 +205,6 @@ if fold == 0:
     f=pd.DataFrame(f)
     print(f)
 
-
-# # Check for string values
-
-# In[9]:
-
-
 # Check if the dataset has any string values and converting the string values to its one hot encoding values
 if fold == 0:
     flag, str_index = check_string(f)
@@ -273,12 +231,6 @@ if fold == 0:
 else:
     df1=0
     Test_fold , Train_fold = create_fold(df,fold,df1)       
-
-
-# # Call Naive Bayes
-
-# In[14]:
-
 
 # Loop through all Folds, create Decision Tree and calculate performance metrics for each fold
 # Loop through all Folds, predict output class by KNN algorithm and calculate performance metrics for each fold
@@ -356,10 +308,3 @@ if fold!=0 and fold!=1:
     print("Precision: ", mean(precision))
     print("Recall: ", mean(recall))
     print("F1 measure: ", mean(f1))
-
-
-# In[ ]:
-
-
-
-
