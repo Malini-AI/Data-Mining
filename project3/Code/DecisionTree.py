@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[131]:
-
-
 import pandas as pd
 import numpy as np
 import math
@@ -13,9 +10,6 @@ from random import randrange
 from random import seed
 from sklearn import preprocessing
 import random
-
-
-# In[132]:
 
 
 # Data structure for saving tree where each node contains values: split value and index of split value
@@ -120,9 +114,6 @@ class Node:
         return lines, n + m + u, max(p, q) + 2, n + u // 2
 
 
-# In[133]:
-
-
 # User Input for Dataset & Number of Folds
 file_name = input("Enter file name: ")
 if(file_name=="project3_dataset4.txt"):
@@ -132,27 +123,8 @@ else:
 if(choice==0):
     fold = int(input("Enter number of folds: "))
 
-
-# In[134]:
-
-
 # Reading file into Dataframe
 Data = pd.read_csv(file_name, sep='\t', lineterminator='\n', header=None)
-
-
-# In[135]:
-
-
-#Data_ori = Data.copy()
-
-
-# In[136]:
-
-
-Data
-
-
-# In[137]:
 
 
 # Function to check if the dataset has nominal(string) and/or continuous(numerical) and return the columns containing strings
@@ -168,10 +140,6 @@ def check_string(data):
             index.append(i)
     return flag, index      
 
-
-# In[138]:
-
-
 # Funtion to convert string to its equivalent one hot enconding value
 def one_hot_encoding(data):
     le = preprocessing.LabelEncoder()
@@ -182,9 +150,6 @@ def one_hot_encoding(data):
     data = le.transform(data)
     #print(data)
     return data
-
-
-# In[139]:
 
 
 # Check if the dataset has any string values and converting the string values to its one hot encoding values
@@ -205,17 +170,8 @@ for i in str_index:
     #print(tree)
     dict_tree[i]=tree
 Data=pd.DataFrame(np_data)
-#Data
-
-
-# In[140]:
-
 
 print(dict_tree)
-
-
-# In[141]:
-
 
 # Function to calculate GINI Index
 def gini_index(left,right,label):
@@ -248,10 +204,6 @@ def gini_index(left,right,label):
         gini = ((1-gl_sum)*(len(left_label)/total_length))+((1-gr_sum)*(len(right_label)/total_length))
     return gini
 
-
-# In[142]:
-
-
 # Function to split tree depending on split value into left and right subsets
 def getTreeSplit(data,val,index):
     left=[]
@@ -263,9 +215,6 @@ def getTreeSplit(data,val,index):
         else:
             right.append(d)
     return left,right
-
-
-# In[143]:
 
 
 # Function to get the minimum GINI Index value, its index, left and right subsets
@@ -299,10 +248,6 @@ def Tree(data):
         np.delete(right_tree, index, 1)
     print("Gini: ",gini)    
     return  index, value, left_tree, right_tree
-
-
-# In[152]:
-
 
 # Function to create Tree based on root, left and right subsets.
 def createTree(root,left,right):
@@ -353,10 +298,6 @@ def createTree(root,left,right):
                 root.insert_right(right[0][-1],None) 
     return  
 
-
-# In[145]:
-
-
 # Function to calculate the performance metrics for the algorithm
 def evaluation(predicted_value, actual_value):
     TP=TN=FP=FN=0
@@ -389,9 +330,6 @@ def evaluation(predicted_value, actual_value):
     return accuracy, precision, recall, f1
 
 
-# In[146]:
-
-
 # Function to predict the label of test data from the decision tree created using training data
 def predict(data):
     predict_label=[]
@@ -412,9 +350,6 @@ def predict(data):
                 break    
         predict_label.append(prev.data)
     return predict_label
-
-
-# In[147]:
 
 
 # Function to create K-Folds of the given dataset into test and train datasets
@@ -444,10 +379,6 @@ def create_fold(data,fold):
             test.append(test_fold)
             train.append(train_fold)
     return test,train
-
-
-# In[153]:
-
 
 # Loop through all Folds, create Decision Tree and calculate performance metrics for each fold
 if(choice==0):
@@ -502,4 +433,3 @@ else:
     root=Node(root_val,root_index)
     createTree(root,left,right)
     root.display()
-
